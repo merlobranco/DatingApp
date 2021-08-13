@@ -11,9 +11,9 @@ namespace API.Middleware
 {
     public class ExceptionMiddleware
     {
-        readonly RequestDelegate _next;
-        readonly ILogger<ExceptionMiddleware> _logger;
-        readonly IHostEnvironment _env;
+        private readonly RequestDelegate _next;
+        private readonly ILogger<ExceptionMiddleware> _logger;
+        private readonly IHostEnvironment _env;
 
         // The RequestDelagate helps to state what is coming next
         // IHostEnvironment is coming handy in order to know in which environment we are, production? development?
