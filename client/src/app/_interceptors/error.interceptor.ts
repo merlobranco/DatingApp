@@ -28,7 +28,8 @@ export class ErrorInterceptor implements HttpInterceptor {
                     modalEstateErrors.push(error.error.errors[key]);
                   }
                 }
-                throw modalEstateErrors;
+                // Flatting the array of arrays
+                throw modalEstateErrors.flat();
               } else {
                 this.toastr.error(error.statusText, error.status);
               }
