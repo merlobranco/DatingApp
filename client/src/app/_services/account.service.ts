@@ -2,13 +2,14 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ReplaySubject } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { environment } from 'src/environments/environment';
 import { User } from '../_models/user';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AccountsService {
-  baseUrl = 'https://localhost:5001/api/';
+  baseUrl = environment.apiUrl;
 
   // Creating an observable for storing our user
   // A replaysubject is an buffer and everytime a subscriber subscribes to this observable
