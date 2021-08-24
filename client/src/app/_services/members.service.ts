@@ -20,9 +20,8 @@ export class MembersService {
   getMembers(userParams: UserParams) {
     let key = Object.values(userParams).join('-');
     var response = this.memberCache.get(key);
-    if (response) {
-      return of(response) // Returning the response members array as observable
-    } 
+    if (response)
+      return of(response) // Returning the response members array as observable 
 
     let params = this.getPaginationHeaders(userParams);
     params = params.append('minAge', userParams.minAge.toString());
@@ -39,10 +38,13 @@ export class MembersService {
   }
 
   getMember(username: string) {
-    const member = this.members.find(m => m.username === username);
+    const member = [...this.memberCache.values()]
+      .reduce((arr, elem) => arr.concat(elem.result), [])
+      .find(u => u.username === username);
+    
+    if (member)
+      return of(member);
 
-    if (member !== undefined) 
-      return of(member)
     return this.http.get<Member>(this.baseUrl + 'users/' + username).pipe(
       map(member => {
         this.members.push(member);
