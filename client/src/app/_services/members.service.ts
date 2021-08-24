@@ -24,6 +24,7 @@ export class MembersService {
     params = params.append('minAge', userParams.minAge.toString());
     params = params.append('maxAge', userParams.maxAge.toString());
     params = params.append('gender', userParams.gender.toString());
+    params = params.append('orderBy', userParams.orderBy);
     
     // In order to pass the parameters (query string) to get http request we should add {observe: 'response', params}
     return this.getPaginatedResult<Member[]>(this.baseUrl + 'users', params);
