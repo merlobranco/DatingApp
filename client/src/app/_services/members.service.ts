@@ -13,12 +13,16 @@ import { UserParams } from '../_models/userParams';
 export class MembersService {
   baseUrl = environment.apiUrl;
   members: Member[] = [];
+  memberCache = new Map();
   
   constructor(private http: HttpClient) { }
 
   getMembers(userParams: UserParams) {
-    // if (this.members.length > 0) 
-      // return of(this.members); // Returning the members array as observable
+    let key = Object.values(userParams).join('-');
+    var response = this.memberCache.get(key);
+    if (response) {
+      return of(response) // Returning the response members array as observable
+    } 
 
     let params = this.getPaginationHeaders(userParams);
     params = params.append('minAge', userParams.minAge.toString());
@@ -27,7 +31,11 @@ export class MembersService {
     params = params.append('orderBy', userParams.orderBy);
     
     // In order to pass the parameters (query string) to get http request we should add {observe: 'response', params}
-    return this.getPaginatedResult<Member[]>(this.baseUrl + 'users', params);
+    return this.getPaginatedResult<Member[]>(this.baseUrl + 'users', params)
+      .pipe(map(response => {
+        this.memberCache.set(key, response);
+        return response;
+      }));
   }
 
   getMember(username: string) {
